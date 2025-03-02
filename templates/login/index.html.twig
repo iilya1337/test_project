@@ -1,0 +1,16 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Authorization{% endblock %}
+
+{% block body %}
+    {{ form_errors(Form) }}
+
+    {{ form_start(Form, { 'action': path('app_authorization_check') }) }}
+    {{ form_row(Form.email) }}
+    {{ form_row(Form.password, {
+        label: 'Password'
+    }) }}
+
+    <button type="submit" class="btn">Authorization</button>
+    {{ form_end(Form) }}
+{% endblock %}
