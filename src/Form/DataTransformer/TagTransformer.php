@@ -19,7 +19,7 @@ class TagTransformer implements DataTransformerInterface
 
     public function transform($tags): string
     {
-        if ($tags->isEmpty()) {
+        if ($tags === null) {
             return '';
         }
 

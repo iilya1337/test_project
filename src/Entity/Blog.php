@@ -36,7 +36,7 @@ class Blog
         ORM\ManyToMany(targetEntity: Tag::class)]
     private ArrayCollection|PersistentCollection|null $tags = null;
 
-    public function getTags(): Collection
+    public function getTags(): ?Collection
     {
         return $this->tags;
     }

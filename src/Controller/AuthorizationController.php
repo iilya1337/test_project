@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\AuthorizationForm;
+use App\Form\AuthorizationType;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,16 +15,21 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 #[Route('/Authorization')]
 class AuthorizationController extends AbstractController
 {
     #[Route(name: 'app_authorization')]
-    public function authorization_index(Request $request): Response
+    public function authorization_index(AuthenticationUtils $utils,  Request $request): Response
     {
-        $from = $this->createForm(AuthorizationForm::class);
+        $error = $utils->getLastAuthenticationError();
+        $lastUsername = $utils->getLastUsername();
+        $from = $this->createForm(AuthorizationType::class);
         return $this->render('login/index.html.twig', [
-            'Form' => $from->createView()
+            'Form' => $from->createView(),
+            'error' => $error,
+            'last_username' => $lastUsername
         ]);
     }
 
@@ -70,11 +75,14 @@ class AuthorizationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_blog_index');
+            #return $this->redirectToRoute('app_blog_new');
         }
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }
+
+    #[Route(path: '/Disapproval', name: 'app_disapproval')]
+    public function logout(): void {}
 }

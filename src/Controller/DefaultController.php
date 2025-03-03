@@ -12,28 +12,9 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class DefaultController extends AbstractController
 {
-    public function __construct(
-        public BlogRepository $blogRepository,
-        public EntityManagerInterface $em,
-    )
-    {
-
-    }
-
     #[Route('/', name: 'app_default')]
     public function index(Request $request): Response
     {
-        return $this->redirectToRoute('app_blog_index');
-        /*
-        $blog = (new Blog())
-            ->setTitle('Title')
-            ->setText('Text')
-            ->setDescription('Description');
-
-        $this->em->persist($blog);
-        $this->em->flush();
-        */
-
-
+        return $this->render('default.html.twig', []);
     }
 }

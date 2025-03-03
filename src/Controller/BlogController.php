@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/blog')]
+#[Route('/admin/Blog')]
 class BlogController extends AbstractController
 {
     #[Route('/', name: 'app_blog_index', methods: ['GET'])]
@@ -33,7 +33,7 @@ class BlogController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_blog_new', methods: ['GET', 'POST'])]
+    #[Route('/New', name: 'app_blog_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $blog = new Blog();
@@ -61,7 +61,7 @@ class BlogController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_blog_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/Edit', name: 'app_blog_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Blog $blog, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(BlogType::class, $blog);
