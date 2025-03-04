@@ -23,7 +23,7 @@ class TagTransformer implements DataTransformerInterface
             return '';
         }
 
-        return implode(',', array_map(fn($tag) => $tag->getId(), $tags->toArray()));
+        return implode(',', array_map(fn($tag) => $tag->getName(), $tags->toArray()));
     }
 
     public function reverseTransform(mixed $value = null): ?ArrayCollection
@@ -39,12 +39,14 @@ class TagTransformer implements DataTransformerInterface
         $tags = new ArrayCollection();
 
         foreach ($items as $item) {
-            if (!$item = $this->tagRepository->find($item)) {
-                $item = new Tag();
-                $item->setName('');
+            $tag = $this->tagRepository->findOneBy(['name' => $item]);
+
+            if ($tag === null) {
+                $tag = new Tag();
+                $item->setName($item);
                 $this->entityManager->persist($item);
             }
-            $tags->add($item);
+            $tags->add($tag);
         }
         $this->entityManager->flush();
 

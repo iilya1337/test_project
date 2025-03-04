@@ -8,10 +8,17 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: BlogRepository::class)]
 class Blog
 {
+
+    public function __construct(UserInterface|User $user)
+    {
+        $this->user = $user;
+    }
+
     #[ORM\Id,
         ORM\GeneratedValue,
         ORM\Column]
@@ -23,12 +30,28 @@ class Blog
     #[ORM\Column(type: Types::TEXT)]
     private ?string $text = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
     #[ORM\ManyToOne(targetEntity: Category::class),
         ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
-    private Category|null $category = null;
+    private ?Category $category = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class),
+        ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    private ?User $user = null;
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
 
     #[ORM\JoinTable(name: 'tags_to_blog'),
         ORM\JoinColumn(name: 'blog_id', referencedColumnName: 'id'),
@@ -55,7 +78,7 @@ class Blog
 
     public function getTagNamesString(): string
     {
-        return implode(', ', $this->tags->map(fn($tag) => $tag->getId())->toArray());
+        return implode(', ', $this->tags->map(fn($tag) => $tag->getName())->toArray());
     }
 
     public function getId(): ?int
@@ -110,4 +133,13 @@ class Blog
 
         return $this;
     }
+    public function getUserToString(): ?string
+    {
+        return $this->user->getEmail();
+    }
+    public function getTagsToString(): ?string
+    {
+        return implode(',', array_map(fn($tag) => $tag->getName(), $this->tags->toArray()));
+    }
+
 }

@@ -9,6 +9,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -81,6 +82,16 @@ class AuthorizationController extends AbstractController
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
+    }
+
+    #[Route(path: '/Redirect', name: 'app_redirect')]
+    public function redirectAuth(Security $security): Response
+    {
+        if ($security->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_blog_index');
+        } else {
+            return $this->redirectToRoute('app_user_blog_index');
+        }
     }
 
     #[Route(path: '/Disapproval', name: 'app_disapproval')]

@@ -7,12 +7,16 @@
 
     {{ include('blog/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <form method="post" action="{{ path('app_blog_delete', {'id': blog.id}) }}"
+    <form method="post" action="{{ path('app_user_blog_delete', {'id': blog.id}) }}"
           onsubmit="return confirm('Are you sure you want to delete this item?');">
         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ blog.id) }}">
         <button class="btn">Delete</button>
     </form>
 
-    <a href="{{ path('app_blog_index') }}">back to list</a>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('app_blog_index') }}">back to list</a>
+    {% else %}
+        <a href="{{ path('app_user_blog_index') }}">back to list</a>
+    {% endif %}
 
 {% endblock %}

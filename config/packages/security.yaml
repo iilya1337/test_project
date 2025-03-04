@@ -19,10 +19,11 @@ security:
             form_login:
                 login_path: app_authorization
                 check_path: app_authorization
+                default_target_path: app_redirect
             logout:
                 path: app_disapproval
-                # where to redirect after logout
                 target: app_default
+            switch_user: { role: ROLE_ADMIN, parameter: _switch_user }
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -34,7 +35,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
          - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+         - { path: ^/user, roles: ROLE_USER }
 
 when@test:
     security:
