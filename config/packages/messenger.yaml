@@ -23,6 +23,6 @@ framework:
             messenger.bus.default: []
 
         routing:
-
+            App\Message\ContentWatchJob: async
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
