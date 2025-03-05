@@ -2,6 +2,12 @@
 
 {% block body %}
 
+    {{ form_start(form) }}
+    {{ form.user }}
+    {{ form.user }}
+
+    <button class="btn-primary">{{ button_label|default('Save') }}</button>
+    {{ form_end(form) }}
 
 
 

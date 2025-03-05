@@ -20,6 +20,10 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+
+    App\Services\GenerateTextAI:
+        $key: '9c4760fe27mshc1d0adf8803f91ep14c7e7jsn5a7e3f71277f'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 

@@ -2,14 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Blog;
-use App\Entity\Category;
-use App\Entity\Tag;
-use App\Entity\User;
+use App\Filter\BlogFilter;
+use App\Form\BlogFilterType;
 use App\Repository\BlogRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,8 +14,27 @@ use Symfony\Component\Routing\Attribute\Route;
 class DefaultController extends AbstractController
 {
     #[Route('/', name: 'app_default')]
-    public function index(Security $security, Request $request, BlogRepository $blogRepository): Response
+    public function index(
+        Request            $request,
+        BlogRepository     $blogRepository,
+        PaginatorInterface $paginator,
+    ): Response
     {
-        return $this->render('default.html.twig', []);
+        $blogFilter = new BlogFilter($this->getUser());
+        $form = $this->createForm(BlogFilterType::class, $blogFilter);
+        $form->handleRequest($request);
+
+
+        $pagination = $paginator->paginate(
+            $blogRepository->findByBlogFilter($blogFilter),
+            $request->query->getInt('page', 1),
+            5
+        );
+
+
+        return $this->render('blog/index.html.twig', [
+            'blogs' => $pagination,
+            'searchForm' => $form->createView(),
+        ]);
     }
 }

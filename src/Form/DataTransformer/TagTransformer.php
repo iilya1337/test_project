@@ -43,8 +43,8 @@ class TagTransformer implements DataTransformerInterface
 
             if ($tag === null) {
                 $tag = new Tag();
-                $item->setName($item);
-                $this->entityManager->persist($item);
+                $tag->setName($item);
+                $this->entityManager->persist($tag);
             }
             $tags->add($tag);
         }

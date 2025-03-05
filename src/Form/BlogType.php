@@ -3,9 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Blog;
+use App\Entity\Category;
 use App\Entity\User;
 use App\Form\DataTransformer\TagTransformer;
-use Proxies\__CG__\App\Entity\Category;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
@@ -26,7 +26,7 @@ class BlogType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('text')
+            ->add('text', TextType::class)
             ->add('description');
 
         if ($this->security->isGranted('ROLE_ADMIN')) {
